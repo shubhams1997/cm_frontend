@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import { isAuthenticated, signout } from "../auth/helper";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -18,9 +19,16 @@ const Menu = ({ history, username = "User", role = 0 }) => {
         </span>
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap">
-            <Link className="nav-link" to="/signout">
+            <span
+              className="nav-link"
+              onClick={() =>
+                signout(() => {
+                  history.push("/");
+                })
+              }
+            >
               Sign out
-            </Link>
+            </span>
           </li>
         </ul>
       </nav>
@@ -28,12 +36,12 @@ const Menu = ({ history, username = "User", role = 0 }) => {
         <div className="sidebar-sticky">
           <ul className="nav flex-column">
             <li className="nav-item">
-              <span className="nav-link">{username} </span>
+              <span className="nav-link h5">{username} </span>
             </li>
             <li className="nav-item ">
               <span className="nav-link text-info">{role} </span>
             </li>
-            <div class="dropdown-divider"></div>
+            <div className="dropdown-divider"></div>
             <li className="nav-item">
               <Link
                 style={currentTab(history, "/dashboard")}
@@ -62,15 +70,17 @@ const Menu = ({ history, username = "User", role = 0 }) => {
                 Customers
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                style={currentTab(history, "/signup")}
-                className="nav-link"
-                to="/signup"
-              >
-                Create Employee
-              </Link>
-            </li>
+            {isAuthenticated() && isAuthenticated().user.role == 1 && (
+              <li className="nav-item">
+                <Link
+                  style={currentTab(history, "/signup")}
+                  className="nav-link"
+                  to="/signup"
+                >
+                  Create Employee
+                </Link>
+              </li>
+            )}
             <li className="nav-item">
               <Link className="nav-link" to="/">
                 Integrations

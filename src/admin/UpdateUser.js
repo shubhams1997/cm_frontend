@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { authenticate, isAuthenticated, signup } from "../auth/helper";
 import Base from "../core/Base";
 
-function Signup(props) {
+function UpdateUser(props) {
   const [values, setValues] = useState({
     name: "",
     lastname: "",
@@ -140,4 +140,4 @@ function Signup(props) {
   );
 }
 
-export default Signup;
+export default UpdateUser;

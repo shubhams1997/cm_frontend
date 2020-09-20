@@ -5,7 +5,7 @@ import Menu from "./Menu";
 
 const Base = ({
   title = "Title",
-  description = "My Description",
+  description = "",
   sideOptionData = "",
   sideOptionDataTwo = "",
   children,
@@ -42,7 +42,7 @@ const Base = ({
   return (
     <div>
       <Menu
-        username={user.name}
+        username={user.name.toUpperCase()}
         role={user.role ? "Admin Access" : "Standard user"}
       />
       <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">

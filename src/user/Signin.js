@@ -47,30 +47,24 @@ function Signin(props) {
           <h1 className="h3 mb-3 font-weight-normal text-white">
             Please sign in
           </h1>
-          <label for="inputUsername" className="sr-only">
-            Username
-          </label>
+          <label className="sr-only">Username</label>
           <input
             type="text"
-            id="inputUsername"
             className="text-white bg-dark form-control"
             placeholder="Username"
             required
-            autofocus
+            autoFocus
             onChange={handleChange("name")}
           />
-          <label for="inputPassword" className="sr-only">
-            Password
-          </label>
+          <label className="sr-only">Password</label>
           <input
             type="password"
-            id="inputPassword"
             className="text-white bg-dark form-control"
             placeholder="Password"
             required
             onChange={handleChange("password")}
           />
-          <p className="text-white">{JSON.stringify(values)}</p>
+          {/* <p className="text-white">{JSON.stringify(values)}</p> */}
 
           <button
             onClick={onSubmit}
@@ -87,8 +81,8 @@ function Signin(props) {
 
   return (
     <div>
-      {SignInForm()}
       {performRedirect()}
+      {SignInForm()}
     </div>
   );
 }
