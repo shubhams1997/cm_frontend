@@ -6,7 +6,10 @@ import {
   createCategory,
   getCategories,
   getBrands,
-} from "../admin/helper";
+  deleteCategory,
+  deleteBrand,
+} from "./helper";
+import { ReactComponent as DeleteIcon } from "../images/delete.svg";
 
 function CategoryBrand(props) {
   const [categoryName, setCategoryName] = useState("");
@@ -15,6 +18,7 @@ function CategoryBrand(props) {
   const [error, setError] = useState(false);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [reload, setReload] = useState(false);
 
   const { user, token } = isAuthenticated();
 
@@ -39,7 +43,7 @@ function CategoryBrand(props) {
         }
       })
       .catch((err) => console.log(err));
-  }, [success]);
+  }, [success, reload]);
 
   const handleCategoryChange = (event) => {
     setError("");
@@ -159,6 +163,32 @@ function CategoryBrand(props) {
     );
   };
 
+  const onCategoryDelete = (categoryId) => {
+    setSuccess("");
+    setError("");
+    deleteCategory(user._id, categoryId, token).then((data) => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setSuccess(true);
+        setReload(!reload);
+      }
+    });
+  };
+
+  const onBrandDelete = (brandId) => {
+    setSuccess("");
+    setError("");
+    deleteBrand(user._id, brandId, token).then((data) => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setSuccess(true);
+        setReload(!reload);
+      }
+    });
+  };
+
   return (
     <Base title="Category & Brand" description="Manage Category and Brand">
       {successMessage()}
@@ -175,6 +205,7 @@ function CategoryBrand(props) {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -183,6 +214,16 @@ function CategoryBrand(props) {
                   <tr key={i}>
                     <th scope="row">{i + 1}</th>
                     <td>{category.name}</td>
+                    <td>
+                      <span
+                        onClick={() => {
+                          onCategoryDelete(category._id);
+                        }}
+                        className="btn"
+                      >
+                        <DeleteIcon />
+                      </span>
+                    </td>
                   </tr>
                 );
               })}
@@ -195,6 +236,7 @@ function CategoryBrand(props) {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th> </th>
               </tr>
             </thead>
             <tbody>
@@ -203,6 +245,16 @@ function CategoryBrand(props) {
                   <tr key={i}>
                     <th scope="row">{i + 1}</th>
                     <td>{brand.name}</td>
+                    <td>
+                      <span
+                        onClick={() => {
+                          onBrandDelete(brand._id);
+                        }}
+                        className="btn"
+                      >
+                        <DeleteIcon />
+                      </span>
+                    </td>
                   </tr>
                 );
               })}

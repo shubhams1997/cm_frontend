@@ -1,6 +1,11 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { isAuthenticated, signout } from "../auth/helper";
+import { ReactComponent as DashboardIcon } from "../images/dashboard.svg";
+import { ReactComponent as CategoryIcon } from "../images/category.svg";
+import { ReactComponent as PersonAddIcon } from "../images/person_add.svg";
+import { ReactComponent as ProductIcon } from "../images/product.svg";
+import { ReactComponent as CustomerIcon } from "../images/customers.svg";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -48,7 +53,7 @@ const Menu = ({ history, username = "User", role = 0 }) => {
                 to="/dashboard"
                 className="nav-link"
               >
-                Dashboard
+                <DashboardIcon /> &nbsp; Dashboard
               </Link>
             </li>
             <li className="nav-item">
@@ -57,17 +62,27 @@ const Menu = ({ history, username = "User", role = 0 }) => {
                 to="/categoryBrand"
                 className="nav-link"
               >
-                Category & Brand
+                <CategoryIcon />
+                &nbsp; Category & Brand
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
-                Products
+              <Link
+                style={currentTab(history, "/products")}
+                className="nav-link"
+                to="/products"
+              >
+                <ProductIcon />
+                &nbsp; Products
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/customers">
-                Customers
+              <Link
+                style={currentTab(history, "/customers")}
+                className="nav-link"
+                to="/customers"
+              >
+                <CustomerIcon /> &nbsp; Customers
               </Link>
             </li>
             {isAuthenticated() && isAuthenticated().user.role == 1 && (
@@ -77,7 +92,7 @@ const Menu = ({ history, username = "User", role = 0 }) => {
                   className="nav-link"
                   to="/signup"
                 >
-                  Create Employee
+                  <PersonAddIcon /> &nbsp; Create Employee
                 </Link>
               </li>
             )}

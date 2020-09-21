@@ -10,6 +10,7 @@ import Dashboard from "./user/Dashboard";
 import Product from "./user/Product";
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
+import AllProducts from "./user/AllProducts";
 
 function Routes(props) {
   return (
@@ -23,6 +24,7 @@ function Routes(props) {
         <PrivateRoute path="/categoryBrand" exact component={CategoryBrand} />
         <PrivateRoute path="/products" exact component={Product} />
         <PrivateRoute path="/customers" exact component={Customers} />
+        <PrivateRoute path="/allproducts" exact component={AllProducts} />
       </Switch>
     </BrowserRouter>
   );
