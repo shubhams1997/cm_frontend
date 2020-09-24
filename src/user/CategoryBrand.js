@@ -132,7 +132,7 @@ function CategoryBrand(props) {
               value={categoryName}
             />
           </div>
-          <button onClick={onCategorySubmit} className="btn btn-success">
+          <button onClick={onCategorySubmit} className="btn btn-dark">
             Create Category
           </button>
         </form>
@@ -155,7 +155,7 @@ function CategoryBrand(props) {
               value={brandName}
             />
           </div>
-          <button onClick={onBrandSubmit} className="btn btn-success">
+          <button onClick={onBrandSubmit} className="btn btn-dark">
             Create Brand
           </button>
         </form>

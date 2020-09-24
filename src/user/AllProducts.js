@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/helper";
 import Base from "../core/Base";
 import { getAllProducts } from "./helper";
@@ -33,6 +34,7 @@ function AllProducts(props) {
             <th scope="col">Landing Price</th>
             <th scope="col">Category</th>
             <th scope="col">Brand</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -49,11 +51,14 @@ function AllProducts(props) {
                 <td>{product?.landingPrice}</td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
-                {/* <td>
-                  <span className="btn btn-sm btn-outline-secondary">
+                <td>
+                  <Link
+                    to={`/product/update/${product._id}`}
+                    className="btn btn-sm btn-outline-secondary"
+                  >
                     Update
-                  </span>{" "}
-                </td> */}
+                  </Link>
+                </td>
               </tr>
             );
           })}

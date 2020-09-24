@@ -5,12 +5,15 @@ import PrivateRoute from "./auth/helper/PrivateRoute";
 import Home from "./core/Home";
 import AllUsers from "./admin/AllUsers";
 import CategoryBrand from "./user/CategoryBrand";
-import Customers from "./user/Customers";
+import Complaint from "./user/Complaint";
 import Dashboard from "./user/Dashboard";
 import Product from "./user/Product";
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
 import AllProducts from "./user/AllProducts";
+import UpdateProduct from "./user/UpdateProduct";
+import AllComplaints from "./user/AllComplaints";
+import UpdateComplaint from "./user/UpdateComplaint";
 
 function Routes(props) {
   return (
@@ -23,8 +26,19 @@ function Routes(props) {
         <PrivateRoute path="/dashboard" exact component={Dashboard} />
         <PrivateRoute path="/categoryBrand" exact component={CategoryBrand} />
         <PrivateRoute path="/products" exact component={Product} />
-        <PrivateRoute path="/customers" exact component={Customers} />
+        <PrivateRoute path="/complaint" exact component={Complaint} />
         <PrivateRoute path="/allproducts" exact component={AllProducts} />
+        <PrivateRoute path="/allcomplaints" exact component={AllComplaints} />
+        <PrivateRoute
+          path="/product/update/:productId"
+          exact
+          component={UpdateProduct}
+        />
+        <PrivateRoute
+          path="/complaint/update/:complaintId"
+          exact
+          component={UpdateComplaint}
+        />
       </Switch>
     </BrowserRouter>
   );

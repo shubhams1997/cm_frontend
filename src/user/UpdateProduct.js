@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Base from "../core/Base";
-import { getCategories, getBrands, createProduct } from "./helper";
+import { getCategories, getBrands, getProduct, updateProduct } from "./helper";
 import { isAuthenticated } from "../auth/helper";
+import { Redirect } from "react-router-dom";
 
-function Product(props) {
+function UpdateProduct({ match }) {
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -18,6 +19,7 @@ function Product(props) {
     brands: [],
     error: "",
     createdProduct: "",
+    getaRedirect: false,
   });
   const {
     name,
@@ -33,6 +35,7 @@ function Product(props) {
     brands,
     createdProduct,
     error,
+    getaRedirect,
   } = values;
 
   const { user, token } = isAuthenticated();
@@ -59,7 +62,27 @@ function Product(props) {
         }
       })
       .catch((err) => console.log(err));
-    setValues({ ...values, categories: c, brands: b });
+
+    await getProduct(match.params.productId, token).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          name: data.name,
+          description: data.description,
+          marketPrice: data.marketPrice,
+          dealerPrice: data.dealerPrice,
+          salesPrice: data.salesPrice,
+          incentive: data.incentive,
+          landingPrice: data.landingPrice,
+          category: data.category,
+          brand: data.brand,
+          categories: c,
+          brands: b,
+        });
+      }
+    });
   };
   useEffect(() => {
     preload();
@@ -72,7 +95,7 @@ function Product(props) {
   const onSubmit = (event) => {
     event.preventDefault();
     setValues({ ...values, loading: true, error: "" });
-    createProduct(user._id, token, {
+    updateProduct(match.params.productId, user._id, token, {
       name,
       description,
       marketPrice,
@@ -89,29 +112,20 @@ function Product(props) {
         } else {
           setValues({
             ...values,
-            name: "",
-            description: "",
-            marketPrice: "",
-            dealerPrice: "",
-            salesPrice: "",
-            incentive: "",
-            landingPrice: "",
-            createdProduct: data.name,
-            loading: false,
+            getaRedirect: true,
           });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const successMessage = () => (
-    <div
-      style={{ display: createdProduct ? "" : "none" }}
-      className="alert alert-success mt-3"
-    >
-      {createdProduct} created Successfully.
-    </div>
-  );
+  const performRedirect = () => {
+    if (getaRedirect) {
+      if (user) {
+        return <Redirect to="/allproducts" />;
+      }
+    }
+  };
 
   const errorMessage = () => {
     return (
@@ -210,7 +224,7 @@ function Product(props) {
               onChange={handleChange("category")}
               className="form-control"
             >
-              <option>Select</option>
+              <option>{category}</option>
               {categories &&
                 categories.map((cate, index) => (
                   <option key={index} value={cate.name}>
@@ -222,7 +236,7 @@ function Product(props) {
           <div className="form-group col-sm-6">
             <label>Brand</label>
             <select onChange={handleChange("brand")} className="form-control">
-              <option>Select</option>
+              <option>{brand}</option>
               {brands &&
                 brands.map((brand, index) => (
                   <option key={index} value={brand.name}>
@@ -234,8 +248,8 @@ function Product(props) {
         </div>
         <div className="form-group row">
           <div className="col-sm-10">
-            <button onClick={onSubmit} className="btn btn-dark">
-              Submit
+            <button onClick={onSubmit} className="btn btn-primary">
+              Update
             </button>
           </div>
         </div>
@@ -249,11 +263,11 @@ function Product(props) {
       description="Manage your Products here."
       sideOptionData={{ value: "All Products", to: "/allproducts" }}
     >
-      {successMessage()}
+      {performRedirect()}
       {errorMessage()}
       {createProductForm()}
     </Base>
   );
 }
 
-export default Product;
+export default UpdateProduct;

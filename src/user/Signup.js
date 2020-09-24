@@ -92,7 +92,7 @@ function Signup(props) {
 
           <button
             onClick={onSubmit}
-            className="mt-2 btn btn-lg btn-primary btn-block"
+            className="mt-2 btn btn-lg btn-dark btn-block"
             type="submit"
           >
             Create
