@@ -15,7 +15,12 @@ function Signup(props) {
   const { name, lastname, password, role, error, loading, success } = values;
 
   const handleChange = (name) => (event) => {
-    setValues({ ...values, error: false, [name]: event.target.value });
+    setValues({
+      ...values,
+      loading: false,
+      error: false,
+      [name]: event.target.value,
+    });
   };
 
   const handleRole = (event) => {
@@ -24,7 +29,7 @@ function Signup(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setValues({ ...values, error: false, success: false });
+    setValues({ ...values, loading: true, error: false, success: false });
     signup({ name, lastname, password, role })
       .then((data) => {
         console.log(data);
@@ -37,6 +42,7 @@ function Signup(props) {
             lastname: "",
             password: "",
             success: true,
+            loading: false,
           });
         }
       })
@@ -54,7 +60,6 @@ function Signup(props) {
                 type="text"
                 className="form-control"
                 placeholder="Username"
-                required
                 autoFocus
                 onChange={handleChange("name")}
                 value={name}
@@ -74,7 +79,6 @@ function Signup(props) {
             type="password"
             className=" form-control mt-2"
             placeholder="Password"
-            required
             onChange={handleChange("password")}
             value={password}
           />
@@ -88,15 +92,24 @@ function Signup(props) {
             <label className="form-check-label">Is this User an Admin ?</label>
           </div>
 
-          {/* <p>{JSON.stringify(values)}</p> */}
-
-          <button
-            onClick={onSubmit}
-            className="mt-2 btn btn-lg btn-dark btn-block"
-            type="submit"
-          >
-            Create
-          </button>
+          {loading ? (
+            <button
+              class="mt-2 btn btn-lg btn-dark btn-block"
+              type="button"
+              disabled
+            >
+              <span class="spinner-border spinner-border-sm"></span>
+              Creating...
+            </button>
+          ) : (
+            <button
+              onClick={onSubmit}
+              className="mt-2 btn btn-lg btn-dark btn-block"
+              type="submit"
+            >
+              Create
+            </button>
+          )}
           <p className="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
         </form>
       </div>

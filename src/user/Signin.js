@@ -39,6 +39,17 @@ function Signin(props) {
       .catch((err) => console.log("Sign in Failed", err));
   };
 
+  const errorMessage = () => {
+    return (
+      <div
+        className="alert alert-danger"
+        style={{ display: error ? "" : "none" }}
+      >
+        {error}
+      </div>
+    );
+  };
+
   const SignInForm = () => {
     return (
       <div className="bg-dark signin_body text-center">
@@ -47,6 +58,7 @@ function Signin(props) {
           <h1 className="h3 mb-3 font-weight-normal text-white">
             Please sign in
           </h1>
+          {errorMessage()}
           <label className="sr-only">Username</label>
           <input
             type="text"
@@ -64,15 +76,24 @@ function Signin(props) {
             required
             onChange={handleChange("password")}
           />
-          {/* <p className="text-white">{JSON.stringify(values)}</p> */}
-
-          <button
-            onClick={onSubmit}
-            className="btn btn-lg btn-primary btn-block"
-            type="submit"
-          >
-            Sign in
-          </button>
+          {loading ? (
+            <button
+              class="btn btn-lg btn-primary btn-block"
+              type="button"
+              disabled
+            >
+              <span class="spinner-border spinner-border-sm"></span>
+              Loading...
+            </button>
+          ) : (
+            <button
+              onClick={onSubmit}
+              className="btn btn-lg btn-primary btn-block"
+              type="submit"
+            >
+              Sign in
+            </button>
+          )}
           <p className="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
         </form>
       </div>

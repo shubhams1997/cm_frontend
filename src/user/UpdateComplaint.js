@@ -39,12 +39,13 @@ function UpdateComplaint({ match }) {
     error,
     createdComplaint,
     getaRedirect,
+    loading,
   } = values;
 
   const { user, token } = isAuthenticated();
 
   const handleChange = (name) => (event) => {
-    setValues({ ...values, [name]: event.target.value });
+    setValues({ ...values, [name]: event.target.value, loading: false });
   };
 
   const handleClose = () => {
@@ -105,6 +106,7 @@ function UpdateComplaint({ match }) {
           setValues({
             ...values,
             getaRedirect: true,
+            loading: false,
           });
         }
       })
@@ -114,7 +116,7 @@ function UpdateComplaint({ match }) {
   const performRedirect = () => {
     if (getaRedirect) {
       if (user) {
-        return <Redirect to="/allcomplaints" />;
+        return <Redirect to="/allcomplaints?page=0&limit=10" />;
       }
     }
   };
@@ -281,9 +283,16 @@ function UpdateComplaint({ match }) {
         </div>
         <div className="form-group row">
           <div className="col-sm-10">
-            <button onClick={onSubmit} className="btn btn-dark">
-              Update
-            </button>
+            {loading ? (
+              <button className="btn btn-dark" disabled>
+                <span className="spinner-border spinner-border-sm"></span>
+                Saving...
+              </button>
+            ) : (
+              <button onClick={onSubmit} className="btn btn-dark">
+                Update
+              </button>
+            )}
           </div>
         </div>
       </form>

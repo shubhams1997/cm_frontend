@@ -101,8 +101,8 @@ export const createProduct = (userId, token, product) => {
 };
 
 // get all products
-export const getAllProducts = (token) => {
-  return fetch(`${API}/products`, {
+export const getAllProducts = (token, limit, page) => {
+  return fetch(`${API}/products?limit=${limit}&page=${page}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -164,8 +164,8 @@ export const createComplaint = (userId, token, complaint) => {
 };
 
 // get all complaints
-export const getAllComplaints = (token) => {
-  return fetch(`${API}/complaints`, {
+export const getAllComplaints = (token, limit, page) => {
+  return fetch(`${API}/complaints?limit=${limit}&page=${page}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

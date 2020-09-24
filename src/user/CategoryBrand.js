@@ -19,11 +19,11 @@ function CategoryBrand(props) {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user, token } = isAuthenticated();
 
   useEffect(() => {
-    console.log("getting categories and brands");
     getCategories(token)
       .then((data) => {
         if (data.error) {
@@ -46,11 +46,13 @@ function CategoryBrand(props) {
   }, [success, reload]);
 
   const handleCategoryChange = (event) => {
+    setLoading(false);
     setError("");
     setCategoryName(event.target.value);
   };
 
   const handleBrandChange = (event) => {
+    setLoading(false);
     setError("");
     setBrandName(event.target.value);
   };
@@ -88,12 +90,14 @@ function CategoryBrand(props) {
   const onCategorySubmit = (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
     setSuccess(false);
     createCategory(user._id, token, categoryName)
       .then((data) => {
         if (data.error) {
           setError(data.error);
         } else {
+          setLoading(false);
           setSuccess(true);
           setCategoryName("");
         }
@@ -104,12 +108,14 @@ function CategoryBrand(props) {
   const onBrandSubmit = (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
     setSuccess(false);
     createBrand(user._id, token, brandName)
       .then((data) => {
         if (data.error) {
           setError(data.error);
         } else {
+          setLoading(false);
           setSuccess(true);
           setBrandName("");
         }
@@ -132,9 +138,16 @@ function CategoryBrand(props) {
               value={categoryName}
             />
           </div>
-          <button onClick={onCategorySubmit} className="btn btn-dark">
-            Create Category
-          </button>
+          {loading ? (
+            <button className="btn btn-dark" disabled>
+              <span className="spinner-border spinner-border-sm"></span>
+              Loading...
+            </button>
+          ) : (
+            <button onClick={onCategorySubmit} className="btn btn-dark">
+              Create Category
+            </button>
+          )}
         </form>
       </div>
     );
@@ -155,9 +168,16 @@ function CategoryBrand(props) {
               value={brandName}
             />
           </div>
-          <button onClick={onBrandSubmit} className="btn btn-dark">
-            Create Brand
-          </button>
+          {loading ? (
+            <button className="btn btn-dark" disabled>
+              <span className="spinner-border spinner-border-sm"></span>
+              Loading...
+            </button>
+          ) : (
+            <button onClick={onBrandSubmit} className="btn btn-dark">
+              Create Brand
+            </button>
+          )}
         </form>
       </div>
     );

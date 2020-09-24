@@ -17,6 +17,7 @@ function Product(props) {
     brand: "",
     brands: [],
     error: "",
+    loading: false,
     createdProduct: "",
   });
   const {
@@ -32,6 +33,7 @@ function Product(props) {
     brand,
     brands,
     createdProduct,
+    loading,
     error,
   } = values;
 
@@ -66,7 +68,7 @@ function Product(props) {
   }, []);
 
   const handleChange = (name) => (event) => {
-    setValues({ ...values, [name]: event.target.value });
+    setValues({ ...values, [name]: event.target.value, loading: false });
   };
 
   const onSubmit = (event) => {
@@ -135,7 +137,6 @@ function Product(props) {
               type="text"
               className="form-control"
               value={name}
-              required
             />
           </div>
         </div>
@@ -167,7 +168,6 @@ function Product(props) {
               type="text"
               className="form-control"
               value={salesPrice}
-              required
             />
           </div>
           <div className="form-group col-sm-4">
@@ -177,7 +177,6 @@ function Product(props) {
               type="text"
               className="form-control"
               value={dealerPrice}
-              required
             />
           </div>
         </div>
@@ -189,7 +188,6 @@ function Product(props) {
               type="text"
               className="form-control"
               value={incentive}
-              required
             />
           </div>
           <div className="form-group col-sm-6">
@@ -199,7 +197,6 @@ function Product(props) {
               type="text"
               className="form-control"
               value={landingPrice}
-              required
             />
           </div>
         </div>
@@ -234,9 +231,16 @@ function Product(props) {
         </div>
         <div className="form-group row">
           <div className="col-sm-10">
-            <button onClick={onSubmit} className="btn btn-dark">
-              Submit
-            </button>
+            {loading ? (
+              <button className="btn btn-dark" disabled>
+                <span className="spinner-border spinner-border-sm"></span>
+                Saving...
+              </button>
+            ) : (
+              <button onClick={onSubmit} className="btn btn-dark">
+                Submit
+              </button>
+            )}
           </div>
         </div>
       </form>
@@ -247,7 +251,10 @@ function Product(props) {
     <Base
       title="Products"
       description="Manage your Products here."
-      sideOptionData={{ value: "All Products", to: "/allproducts" }}
+      sideOptionData={{
+        value: "All Products",
+        to: "/allproducts?page=0&limit=10",
+      }}
     >
       {successMessage()}
       {errorMessage()}

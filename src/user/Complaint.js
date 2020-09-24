@@ -20,7 +20,7 @@ function Complaint() {
     error: "",
     loading: "",
     createdComplaint: false,
-    getaRedirect: false,
+    loading: false,
   });
   const {
     name,
@@ -37,13 +37,13 @@ function Complaint() {
     closed,
     error,
     createdComplaint,
-    getaRedirect,
+    loading,
   } = values;
 
   const { user, token } = isAuthenticated();
 
   const handleChange = (name) => (event) => {
-    setValues({ ...values, [name]: event.target.value });
+    setValues({ ...values, [name]: event.target.value, loading: false });
   };
 
   const onSubmit = (event) => {
@@ -83,6 +83,7 @@ function Complaint() {
             reference3: "",
             closed: false,
             createdComplaint: true,
+            loading: false,
           });
         }
       })
@@ -227,9 +228,16 @@ function Complaint() {
         </div>
         <div className="form-group row">
           <div className="col-sm-10">
-            <button onClick={onSubmit} className="btn btn-dark">
-              Submit
-            </button>
+            {loading ? (
+              <button className="btn btn-dark" disabled>
+                <span className="spinner-border spinner-border-sm"></span>
+                Saving...
+              </button>
+            ) : (
+              <button onClick={onSubmit} className="btn btn-dark">
+                Submit
+              </button>
+            )}
           </div>
         </div>
       </form>
@@ -239,7 +247,10 @@ function Complaint() {
     <Base
       title="Complaint"
       description="Manage your customers here."
-      sideOptionData={{ value: "All Complaints", to: "/allcomplaints" }}
+      sideOptionData={{
+        value: "All Complaints",
+        to: "/allcomplaints?page=0&limit=10",
+      }}
     >
       {successMessage()}
       {errorMessage()}

@@ -4,20 +4,37 @@ import { isAuthenticated } from "../auth/helper";
 import Base from "../core/Base";
 import { getAllComplaints } from "./helper";
 
-function AllComplaints(props) {
+function AllComplaints({ match, location }) {
   const [complaints, setComplaints] = useState([]);
+  const [totalCount, setTotalCount] = useState("");
+  const [limit, setLimit] = useState(5);
+  const [page, setpage] = useState(0);
+  const [reload, setReload] = useState(true);
 
   const { user, token } = isAuthenticated();
 
-  useEffect(() => {
-    getAllComplaints(token).then((data) => {
+  const preload = async () => {
+    const page = location.search.split("&")[0].match(/(\d+)/)[0];
+    const limit = location.search.split("&")[1].match(/(\d+)/)[0];
+    setLimit(parseInt(limit));
+    setpage(parseInt(page));
+    await getAllComplaints(token, limit, page * limit).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        setComplaints(data);
+        setTotalCount(data.totalCount);
+        setComplaints(data.complaints);
       }
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    preload();
+  }, [reload]);
+
+  const reloadPage = () => {
+    setReload(!reload);
+  };
 
   const dateFormat = (date) => {
     if (!date) return "---------";
@@ -26,7 +43,10 @@ function AllComplaints(props) {
   };
 
   return (
-    <Base title="All Complaints">
+    <Base
+      title="All Complaints"
+      description={`Total Complaints are ${totalCount}`}
+    >
       <table className="table">
         <thead>
           <tr>
@@ -51,7 +71,7 @@ function AllComplaints(props) {
                 className={complaint.closed ? "bg-light" : ""}
                 key={complaint._id}
               >
-                <th scope="row">{dateFormat(complaint.DOP)}</th>
+                <th scope="row">{dateFormat(complaint.createdAt)}</th>
                 <td>{complaint.name}</td>
                 <td>{complaint?.address}</td>
                 <td>{complaint?.mobileNo}</td>
@@ -75,6 +95,29 @@ function AllComplaints(props) {
           })}
         </tbody>
       </table>
+      <nav aria-label="Page navigation example">
+        <ul className="pagination">
+          {parseInt(page) > 0 && (
+            <Link
+              onClick={reloadPage}
+              to={`/allcomplaints?page=${parseInt(page) - 1}&limit=${limit}`}
+              className="page-item page-link text-dark"
+            >
+              prev
+            </Link>
+          )}
+
+          {parseInt(page) * parseInt(limit) < parseInt(totalCount) && (
+            <Link
+              onClick={reloadPage}
+              to={`/allcomplaints?page=${parseInt(page) + 1}&limit=${limit}`}
+              className="page-item page-link text-dark"
+            >
+              next
+            </Link>
+          )}
+        </ul>
+      </nav>
     </Base>
   );
 }

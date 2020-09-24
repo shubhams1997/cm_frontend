@@ -18,6 +18,7 @@ function UpdateProduct({ match }) {
     brand: "",
     brands: [],
     error: "",
+    loading: false,
     createdProduct: "",
     getaRedirect: false,
   });
@@ -34,6 +35,7 @@ function UpdateProduct({ match }) {
     brand,
     brands,
     createdProduct,
+    loading,
     error,
     getaRedirect,
   } = values;
@@ -112,6 +114,7 @@ function UpdateProduct({ match }) {
         } else {
           setValues({
             ...values,
+            loading: false,
             getaRedirect: true,
           });
         }
@@ -122,7 +125,7 @@ function UpdateProduct({ match }) {
   const performRedirect = () => {
     if (getaRedirect) {
       if (user) {
-        return <Redirect to="/allproducts" />;
+        return <Redirect to="/allproducts?page=0&limit=10" />;
       }
     }
   };
@@ -248,9 +251,16 @@ function UpdateProduct({ match }) {
         </div>
         <div className="form-group row">
           <div className="col-sm-10">
-            <button onClick={onSubmit} className="btn btn-primary">
-              Update
-            </button>
+            {loading ? (
+              <button className="btn btn-dark" disabled>
+                <span className="spinner-border spinner-border-sm"></span>
+                Saving...
+              </button>
+            ) : (
+              <button onClick={onSubmit} className="btn btn-dark">
+                Update
+              </button>
+            )}
           </div>
         </div>
       </form>

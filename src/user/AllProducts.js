@@ -4,23 +4,40 @@ import { isAuthenticated } from "../auth/helper";
 import Base from "../core/Base";
 import { getAllProducts } from "./helper";
 
-function AllProducts(props) {
+function AllProducts({ match, location }) {
   const [products, setProducts] = useState([]);
+  const [totalCount, setTotalCount] = useState("");
+  const [limit, setLimit] = useState(5);
+  const [page, setpage] = useState(0);
+  const [reload, setReload] = useState(true);
 
   const { user, token } = isAuthenticated();
 
-  useEffect(() => {
-    getAllProducts(token).then((data) => {
+  const preload = async () => {
+    const page = location.search.split("&")[0].match(/(\d+)/)[0];
+    const limit = location.search.split("&")[1].match(/(\d+)/)[0];
+    setLimit(limit);
+    setpage(page);
+    await getAllProducts(token, limit, page * limit).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        setProducts(data);
+        setTotalCount(data.totalCount);
+        setProducts(data.products);
       }
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    preload();
+  }, [reload]);
+
+  const reloadPage = () => {
+    setReload(!reload);
+  };
 
   return (
-    <Base title="All Products">
+    <Base title="All Products" description={`Total Products are ${totalCount}`}>
       <table className="table">
         <thead>
           <tr>
@@ -41,7 +58,9 @@ function AllProducts(props) {
           {products.map((product, i) => {
             return (
               <tr key={product._id}>
-                <th scope="row">{i + 1}</th>
+                <th scope="row">
+                  {parseInt(page) * parseInt(limit) + (i + 1)}
+                </th>
                 <td>{product.name}</td>
                 <td>{product?.description}</td>
                 <td>{product?.marketPrice}</td>
@@ -64,6 +83,29 @@ function AllProducts(props) {
           })}
         </tbody>
       </table>
+      <nav aria-label="Page navigation example">
+        <ul className="pagination">
+          {parseInt(page) > 0 && (
+            <Link
+              onClick={reloadPage}
+              to={`/allproducts?page=${parseInt(page) - 1}&limit=${limit}`}
+              className="page-item page-link text-dark"
+            >
+              prev
+            </Link>
+          )}
+
+          {parseInt(page) * parseInt(limit) < parseInt(totalCount) && (
+            <Link
+              onClick={reloadPage}
+              to={`/allproducts?page=${parseInt(page) + 1}&limit=${limit}`}
+              className="page-item page-link text-dark"
+            >
+              next
+            </Link>
+          )}
+        </ul>
+      </nav>
     </Base>
   );
 }
