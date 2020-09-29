@@ -14,11 +14,9 @@ const Base = ({
 
   const sideOption = (data) => {
     return (
-      <button className="btn btn-sm btn-outline-secondary ">
-        <Link className="text-dark" to={data.to}>
-          {data.value}
-        </Link>
-      </button>
+      <Link className="btn btn-sm btn-outline-secondary text-dark" to={data.to}>
+        {data.value}
+      </Link>
     );
   };
 

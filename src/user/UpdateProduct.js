@@ -271,7 +271,10 @@ function UpdateProduct({ match }) {
     <Base
       title="Products"
       description="Manage your Products here."
-      sideOptionData={{ value: "All Products", to: "/allproducts" }}
+      sideOptionData={{
+        value: "All Products",
+        to: "/allproducts?page=0&limit=10",
+      }}
     >
       {performRedirect()}
       {errorMessage()}

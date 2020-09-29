@@ -36,10 +36,10 @@ function AllComplaints({ match, location }) {
     setReload(!reload);
   };
 
-  const dateFormat = (date) => {
-    if (!date) return "---------";
-    let d = new Date(date);
-    return d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+  const dateFormat = (data) => {
+    if (!data) return "---------";
+    let d = new Date(data);
+    return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
   };
 
   return (
@@ -50,7 +50,7 @@ function AllComplaints({ match, location }) {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">DOP</th>
+            <th scope="col">Registered Date</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>
             <th scope="col">Mobile No</th>

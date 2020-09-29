@@ -130,13 +130,17 @@ function Product(props) {
     return (
       <form>
         <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Name</label>
+          <label className="col-sm-2 col-form-label">
+            Name
+            <span className="text-danger">*</span>
+          </label>
           <div className="col-sm-10">
             <input
               onChange={handleChange("name")}
               type="text"
               className="form-control"
               value={name}
+              autoFocus
             />
           </div>
         </div>
@@ -162,7 +166,10 @@ function Product(props) {
             />
           </div>
           <div className="form-group col-sm-4">
-            <label>Sales Price</label>
+            <label>
+              Sales Price
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("salesPrice")}
               type="text"
@@ -171,7 +178,10 @@ function Product(props) {
             />
           </div>
           <div className="form-group col-sm-4">
-            <label>Dealer Price</label>
+            <label>
+              Dealer Price
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("dealerPrice")}
               type="text"
@@ -182,7 +192,10 @@ function Product(props) {
         </div>
         <div className="form-group row">
           <div className="form-group col-sm-6">
-            <label>Incentive</label>
+            <label>
+              Incentive
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("incentive")}
               type="text"
@@ -191,7 +204,10 @@ function Product(props) {
             />
           </div>
           <div className="form-group col-sm-6">
-            <label>Landing Price</label>
+            <label>
+              Landing Price
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("landingPrice")}
               type="text"
@@ -202,7 +218,10 @@ function Product(props) {
         </div>
         <div className=" row">
           <div className="form-group col-sm-6">
-            <label>Category</label>
+            <label>
+              Category
+              <span className="text-danger">*</span>
+            </label>
             <select
               onChange={handleChange("category")}
               className="form-control"
@@ -217,7 +236,10 @@ function Product(props) {
             </select>
           </div>
           <div className="form-group col-sm-6">
-            <label>Brand</label>
+            <label>
+              Brand
+              <span className="text-danger">*</span>
+            </label>
             <select onChange={handleChange("brand")} className="form-control">
               <option>Select</option>
               {brands &&

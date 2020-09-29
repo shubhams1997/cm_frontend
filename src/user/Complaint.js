@@ -114,19 +114,26 @@ function Complaint() {
     return (
       <form>
         <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Name</label>
+          <label className="col-sm-2 col-form-label">
+            Name
+            <span className="text-danger">*</span>
+          </label>
           <div className="col-sm-10">
             <input
               value={name}
               onChange={handleChange("name")}
               type="text"
               className="form-control"
+              autoFocus
             />
           </div>
         </div>
         <div className="form-group row">
           <div className="form-group col-sm-6">
-            <label>Address</label>
+            <label>
+              Address
+              <span className="text-danger">*</span>
+            </label>
             <input
               value={address}
               onChange={handleChange("address")}
@@ -135,7 +142,10 @@ function Complaint() {
             />
           </div>
           <div className="form-group col-sm-6">
-            <label>Mobile No</label>
+            <label>
+              Mobile No
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("mobileNo")}
               type="text"
@@ -147,7 +157,10 @@ function Complaint() {
 
         <div className="form-group row">
           <div className="form-group col-sm-4">
-            <label>Product Name</label>
+            <label>
+              Product Name
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("product")}
               type="text"
@@ -156,7 +169,10 @@ function Complaint() {
             />
           </div>
           <div className="form-group col-sm-4">
-            <label>Brand</label>
+            <label>
+              Brand
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("brand")}
               type="text"
@@ -165,7 +181,10 @@ function Complaint() {
             />
           </div>
           <div className="form-group col-sm-4">
-            <label>Model No</label>
+            <label>
+              Model No
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("modelNo")}
               type="text"
@@ -177,7 +196,10 @@ function Complaint() {
 
         <div className="form-group row">
           <div className="form-group col-sm-6">
-            <label>DOP</label>
+            <label>
+              DOP
+              <span className="text-danger">*</span>
+            </label>
             <input
               onChange={handleChange("DOP")}
               type="date"

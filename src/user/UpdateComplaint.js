@@ -136,7 +136,9 @@ function UpdateComplaint({ match }) {
     if (!data) return "---------";
     let d = new Date(data);
     let month =
-      d.getMonth().toString().length < 2 ? "0" + d.getMonth() : d.getMonth();
+      (d.getMonth() + 1).toString().length < 2
+        ? "0" + (d.getMonth() + 1)
+        : d.getMonth() + 1;
     let date =
       d.getDate().toString().length < 2 ? "0" + d.getDate() : d.getDate();
     let v = d.getFullYear() + "-" + month + "-" + date;
@@ -216,7 +218,6 @@ function UpdateComplaint({ match }) {
               type="date"
               className="form-control"
               value={dateFormat(DOP)}
-              placeholder="DD/MM/YYYY"
             />
           </div>
           <div className="form-group col-sm-6">
@@ -302,7 +303,10 @@ function UpdateComplaint({ match }) {
     <Base
       title="Complaint"
       description="Update your customers here."
-      sideOptionData={{ value: "All Complaints", to: "/allcomplaints" }}
+      sideOptionData={{
+        value: "All Complaints",
+        to: "/allcomplaints?page=0&limit=10",
+      }}
     >
       {performRedirect()}
       {errorMessage()}

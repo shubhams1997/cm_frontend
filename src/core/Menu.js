@@ -6,6 +6,7 @@ import { ReactComponent as CategoryIcon } from "../images/category.svg";
 import { ReactComponent as PersonAddIcon } from "../images/person_add.svg";
 import { ReactComponent as ProductIcon } from "../images/product.svg";
 import { ReactComponent as CustomerIcon } from "../images/customers.svg";
+import { ReactComponent as FinanceIcon } from "../images/finance.svg";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -97,8 +98,12 @@ const Menu = ({ history, username = "User", role = 0 }) => {
               </li>
             )}
             <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Integrations
+              <Link
+                style={currentTab(history, "/finance")}
+                className="nav-link"
+                to="/finance"
+              >
+                <FinanceIcon /> &nbsp; Finance
               </Link>
             </li>
           </ul>
