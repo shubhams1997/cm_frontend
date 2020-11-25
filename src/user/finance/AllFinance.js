@@ -1,127 +1,141 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { isAuthenticated } from "../../auth/helper";
-import Base from "../../core/Base";
-import { getAllFinance } from "../helper/financeHelper";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { isAuthenticated } from '../../auth/helper';
+import Base from '../../core/Base';
+import { getAllFinance, getSeries } from '../helper/financeHelper';
 
 function AllFinance({ match, location }) {
-  const [finances, setFinances] = useState([]);
-  const [totalCount, setTotalCount] = useState("");
-  const [limit, setLimit] = useState(5);
-  const [page, setpage] = useState(0);
-  const [reload, setReload] = useState(true);
+	const [ finances, setFinances ] = useState([]);
+	const [ searchText, setSearchText ] = useState('');
+	const [ values, setValues ] = useState({
+		seriesNo: '',
+		series: []
+	});
 
-  const { user, token } = isAuthenticated();
+	const { seriesNo, series } = values;
+	const { user, token } = isAuthenticated();
 
-  const preload = async () => {
-    const page = location.search.split("&")[0].match(/(\d+)/)[0];
-    const limit = location.search.split("&")[1].match(/(\d+)/)[0];
-    setLimit(limit);
-    setpage(page);
-    await getAllFinance(token, limit, page * limit)
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          setTotalCount(data.totalCount);
-          setFinances(data.finances);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+	const preload = async () => {
+		getSeries(token)
+			.then((data) => {
+				if (data.error) {
+					setValues({ ...values, error: data.error });
+				} else {
+					setValues({ ...values, series: data });
+				}
+			})
+			.catch((err) => console.log(err));
+	};
 
-  useEffect(() => {
-    preload();
-  }, [reload]);
+	const getFinances = () => {
+		getAllFinance(token, seriesNo)
+			.then((data) => {
+				if (data.error) {
+					console.log(data.error);
+				} else {
+					setFinances(data);
+				}
+			})
+			.catch((err) => console.log(err));
+	};
 
-  const reloadPage = () => {
-    setReload(!reload);
-  };
+	useEffect(() => {
+		preload();
+	}, []);
 
-  const dateFormat = (data) => {
-    if (!data) return "---------";
-    let d = new Date(data);
-    return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
-  };
+	const handleChange = (name) => (event) => {
+		setValues({ ...values, [name]: event.target.value, loading: false });
+	};
 
-  return (
-    <Base title="All Finances" description={`Total Finances are ${totalCount}`}>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Series No</th>
-            <th scope="col">Name</th>
-            <th scope="col">DOP</th>
-            <th scope="col">Due Date</th>
-            <th scope="col">Case No</th>
-            <th scope="col">EMI</th>
-            <th scope="col">Product</th>
-            <th scope="col">Price</th>
-            <th scope="col">Down Payment</th>
-            <th scope="col">Processing Fee</th>
-            <th scope="col">Interest</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {finances.map((finance, i) => {
-            return (
-              <tr key={finance._id}>
-                <th scope="row">{finance.seriesNo}</th>
-                <td>{finance.name}</td>
-                <td>{dateFormat(finance.DOP)}</td>
-                <td>{dateFormat(finance.dueDate)}</td>
-                <td>{finance.caseNo}</td>
-                <td>
-                  {(parseInt(finance.price) -
-                    parseInt(finance.downPayment) +
-                    parseInt(finance.processingFee) +
-                    parseInt(finance.interest) * parseInt(finance.months)) /
-                    parseInt(finance.months)}
-                </td>
-                <td>{finance?.product}</td>
-                <td>{finance?.price}</td>
-                <td>{finance?.downPayment}</td>
-                <td>{finance?.processingFee}</td>
-                <td>{finance.interest}</td>
-                <td>
-                  <Link
-                    to={`/statement/${finance._id}`}
-                    className="btn btn-sm btn-outline-secondary"
-                  >
-                    Full Statement
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <nav aria-label="Page navigation example">
-        <ul className="pagination">
-          {parseInt(page) > 0 && (
-            <Link
-              onClick={reloadPage}
-              to={`/finances?page=${parseInt(page) - 1}&limit=${limit}`}
-              className="page-item page-link text-dark"
-            >
-              prev
-            </Link>
-          )}
+	let filteredFinance = finances.filter((finance) => {
+		return finance.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+	});
 
-          {parseInt(page) * parseInt(limit) < parseInt(totalCount) && (
-            <Link
-              onClick={reloadPage}
-              to={`/finances?page=${parseInt(page) + 1}&limit=${limit}`}
-              className="page-item page-link text-dark"
-            >
-              next
-            </Link>
-          )}
-        </ul>
-      </nav>
-    </Base>
-  );
+	const filterFinance = (event) => {
+		setSearchText(event.target.value);
+	};
+	const dateFormat = (data) => {
+		if (!data) return '---------';
+		let d = new Date(data);
+		return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+	};
+
+	return (
+		<div className='mt-4'>
+			<div className='row'>
+				<div className='form-group col-sm-4'>
+					<select onChange={handleChange('seriesNo')} className='form-control'>
+						<option value=''>Select Series</option>
+						{series &&
+							series.map((s, index) => (
+								<option key={index} value={s._id}>
+									{s.name}
+								</option>
+							))}
+					</select>
+				</div>
+				<div className='form-groupo col-sm-2'>
+					<button onClick={getFinances} className='btn btn-success'>
+						Get
+					</button>
+				</div>
+				<div className='col-sm-2' />
+				<div className='col-sm-4'>
+					<input
+						placeholder='Search'
+						value={searchText}
+						onChange={filterFinance}
+						type='text'
+						className='form-control'
+					/>
+				</div>
+			</div>
+			<table className='table'>
+				<thead>
+					<tr>
+						<th scope='col'>Name</th>
+						<th scope='col'>DOP</th>
+						<th scope='col'>Due Date</th>
+						<th scope='col'>Case No</th>
+						<th scope='col'>Mobile No</th>
+						<th scope='col'>Pending </th>
+						<th />
+					</tr>
+				</thead>
+				<tbody>
+					{filteredFinance &&
+						filteredFinance.map((finance, i) => {
+							return (
+								<tr key={finance._id}>
+									<td>{finance.name}</td>
+									<td>{dateFormat(finance.DOP)}</td>
+									<td>{dateFormat(finance.dueDate)}</td>
+									<td>{finance.caseNo}</td>
+									<td>{finance.mobileNo}</td>
+									<td>{finance.pending}</td>
+									<td>
+										<Link
+											target='blank'
+											to={`/statement/${finance._id}`}
+											className='btn btn-sm btn-outline-secondary'>
+											Full Statement
+										</Link>
+									</td>
+									<td>
+										<Link
+											target='blank'
+											to={`/receipt/${finance._id}`}
+											className='btn btn-sm btn-outline-success'>
+											Pay
+										</Link>
+									</td>
+								</tr>
+							);
+						})}
+				</tbody>
+			</table>
+		</div>
+	);
 }
 
 export default AllFinance;
