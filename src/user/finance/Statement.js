@@ -23,15 +23,6 @@ function Statement({ match }) {
 		error: '',
 		loading: false
 	});
-	const [ entry, setEntry ] = useState({
-		Tdate: '',
-		particular: '',
-		voucherNo: '',
-		amount: '',
-		loading: ''
-	});
-	const [ reload, setReload ] = useState(false);
-	const [ entryError, setEntryError ] = useState('');
 	const [ entries, setEntries ] = useState([]);
 
 	const {
@@ -53,12 +44,7 @@ function Statement({ match }) {
 		error
 	} = values;
 
-	const { Tdate, particular, voucherNo, amount, loading } = entry;
 	const { user, token } = isAuthenticated();
-
-	const handleChange = (name) => (event) => {
-		setEntry({ ...entry, [name]: event.target.value, loading: false });
-	};
 
 	const preload = () => {
 		setValues({ ...values, error: '' });
@@ -87,19 +73,16 @@ function Statement({ match }) {
 		});
 	};
 
-	useEffect(
-		() => {
-			preload();
-			getEntries(token, match.params.financeId).then((data) => {
-				if (data.error) {
-					setEntryError(data.error);
-				} else {
-					setEntries(data);
-				}
-			});
-		},
-		[ reload ]
-	);
+	useEffect(() => {
+		preload();
+		getEntries(token, match.params.financeId).then((data) => {
+			if (data.error) {
+				console.log(data.error);
+			} else {
+				setEntries(data);
+			}
+		});
+	}, []);
 
 	const dateFormat = (data) => {
 		if (!data) return '---------';
@@ -107,24 +90,8 @@ function Statement({ match }) {
 		return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
 	};
 
-	const successMessage = () => (
-		<div style={{ display: success ? '' : 'none' }} className='alert alert-success mt-3'>
-			Entry Added Successfully.
-		</div>
-	);
-
-	const errorMessage = () => {
-		return (
-			<div className='alert alert-danger' style={{ display: entryError ? '' : 'none' }}>
-				{entryError}
-			</div>
-		);
-	};
-
 	return (
 		<Base title='Statement of Customer'>
-			{successMessage()}
-			{errorMessage()}
 			<table className='table table-sm'>
 				<tbody>
 					<tr>

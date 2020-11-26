@@ -69,7 +69,13 @@ function Receipt({ match }) {
 					<h1 className='h3 mb-3 font-weight-normal'>Enter Information</h1>
 					<div className='row'>
 						<div className='col'>
-							<input type='date' className='form-control' onChange={handleChange('date')} value={date} />
+							<input
+								autoFocus
+								type='date'
+								className='form-control'
+								onChange={handleChange('date')}
+								value={date}
+							/>
 						</div>
 						<div className='col'>
 							<input

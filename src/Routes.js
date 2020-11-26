@@ -20,6 +20,7 @@ import Statement from './user/finance/Statement';
 import Series from './user/finance/Series';
 import Finance from './user/finance/Finance';
 import Receipt from './user/finance/Receipt';
+import Due from './user/finance/Due';
 
 function Routes(props) {
 	return (
@@ -39,6 +40,7 @@ function Routes(props) {
 				<PrivateRoute path='/allproducts' exact component={AllProducts} />
 				<PrivateRoute path='/allcomplaints' exact component={AllComplaints} />
 				<PrivateRoute path='/finances' exact component={AllFinance} />
+				<PrivateRoute path='/due' exact component={Due} />
 				<PrivateRoute path='/statement/:financeId' exact component={Statement} />
 				<PrivateRoute path='/receipt/:financeId' exact component={Receipt} />
 				<PrivateRoute path='/product/update/:productId' exact component={UpdateProduct} />

@@ -121,3 +121,28 @@ export const updateSeries = (token, seriesId, userId, seriesName) => {
 		.then((response) => response.json())
 		.catch((err) => console.log(err));
 };
+
+// due
+export const getAllDues = (token, userId) => {
+	return fetch(`${API}/finance/dues/${userId}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			Authorization: `Bearer ${token}`
+		}
+	})
+		.then((response) => response.json())
+		.catch((err) => console.log(err));
+};
+
+export const deleteDue = (token, userId, dueId) => {
+	return fetch(`${API}/finance/due/${userId}/${dueId}`, {
+		method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			Authorization: `Bearer ${token}`
+		}
+	})
+		.then((response) => response.json())
+		.catch((err) => console.log(err));
+};

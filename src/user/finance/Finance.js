@@ -9,7 +9,7 @@ function Finance(props) {
 			<Link to='/createfinance' className='btn btn-outline-dark'>
 				<span tabIndex='1'>Create Finance</span>
 			</Link>
-			<Link to='/createfinance' className='btn btn-outline-dark'>
+			<Link to='/due' className='btn btn-outline-dark'>
 				<span tabIndex='3'>Outstanding</span>
 			</Link>
 			<AllFinance />
