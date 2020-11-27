@@ -84,7 +84,7 @@ function Due(props) {
 						<th scope='col'>Name</th>
 						<th scope='col'>Due Date</th>
 						<th scope='col'>Mobile no</th>
-						<th scope='col'>Pending</th>
+						<th scope='col'>Overdue</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -96,7 +96,7 @@ function Due(props) {
 									<td>{due.finance.name}</td>
 									<td>{dateFormat(due.finance.dueDate)}</td>
 									<td>{due.finance.mobileNo}</td>
-									<td>{due.finance.pending}</td>
+									<td>{due.amount}</td>
 									<td>
 										<Link
 											target='blank'
@@ -113,11 +113,11 @@ function Due(props) {
 											Pay
 										</Link>
 									</td>
-									<td>
+									{/* <td>
 										<span onClick={() => onDelete(due._id)} className='btn btn-outline-danger'>
 											Delete
 										</span>
-									</td>
+									</td> */}
 								</tr>
 							);
 						})}
