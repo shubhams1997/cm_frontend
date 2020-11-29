@@ -65,10 +65,39 @@ export const getEntries = (token, financeId) => {
 		.catch((err) => console.log(err));
 };
 
+export const getAllEntries = (token) => {
+	return fetch(`${API}/financeEntries`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		}
+	})
+		.then((response) => {
+			return response.json();
+		})
+		.catch((err) => console.log(err));
+};
+
 // create Entry
 export const createEntry = (userId, token, entry) => {
 	return fetch(`${API}/financeEntry/create/${userId}`, {
 		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		},
+		body: JSON.stringify(entry)
+	})
+		.then((response) => response.json())
+		.catch((err) => console.log(err));
+};
+
+export const updateEntry = (token, entryId, userId, entry) => {
+	return fetch(`${API}/financeEntry/update/${entryId}/${userId}`, {
+		method: 'PUT',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',

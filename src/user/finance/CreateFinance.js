@@ -312,11 +312,13 @@ function CreateFinance(props) {
 					<div className='form-group col-sm-12'>
 						<span>{months} EMI of Amount : &nbsp; </span>
 						<span>
-							{(parseInt(price) -
-								parseInt(downPayment) +
-								parseInt(processingFee) +
-								parseInt(interest) * parseInt(months)) /
-								parseInt(months)}
+							{Math.floor(
+								(parseInt(price) -
+									parseInt(downPayment) +
+									parseInt(processingFee) +
+									parseInt(interest) * parseInt(months)) /
+									parseInt(months)
+							)}
 						</span>
 					</div>
 				</div>

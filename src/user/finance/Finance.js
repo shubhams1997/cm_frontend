@@ -12,6 +12,9 @@ function Finance(props) {
 			<Link to='/due' className='btn btn-outline-dark'>
 				<span tabIndex='3'>Outstanding</span>
 			</Link>
+			<Link to='/receipts' className='btn btn-outline-dark'>
+				Receipts
+			</Link>
 			<AllFinance />
 		</Base>
 	);

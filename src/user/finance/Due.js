@@ -96,7 +96,7 @@ function Due(props) {
 									<td>{due.finance.name}</td>
 									<td>{dateFormat(due.finance.dueDate)}</td>
 									<td>{due.finance.mobileNo}</td>
-									<td>{due.amount}</td>
+									<td>{Math.floor(due.amount)}</td>
 									<td>
 										<Link
 											target='blank'

@@ -21,6 +21,7 @@ import Series from './user/finance/Series';
 import Finance from './user/finance/Finance';
 import Receipt from './user/finance/Receipt';
 import Due from './user/finance/Due';
+import AllEntry from './user/finance/AllEntry';
 
 function Routes(props) {
 	return (
@@ -34,15 +35,16 @@ function Routes(props) {
 				<PrivateRoute path='/categoryBrand' exact component={CategoryBrand} />
 				<PrivateRoute path='/products' exact component={Product} />
 				<PrivateRoute path='/complaint' exact component={Complaint} />
-				<PrivateRoute path='/createfinance' exact component={CreateFinance} />
-				<PrivateRoute path='/finance' exact component={Finance} />
-				<PrivateRoute path='/series' exact component={Series} />
+				<AdminRoute path='/createfinance' exact component={CreateFinance} />
+				<AdminRoute path='/finance' exact component={Finance} />
+				<AdminRoute path='/series' exact component={Series} />
 				<PrivateRoute path='/allproducts' exact component={AllProducts} />
 				<PrivateRoute path='/allcomplaints' exact component={AllComplaints} />
-				<PrivateRoute path='/finances' exact component={AllFinance} />
-				<PrivateRoute path='/due' exact component={Due} />
-				<PrivateRoute path='/statement/:financeId' exact component={Statement} />
-				<PrivateRoute path='/receipt/:financeId' exact component={Receipt} />
+				<AdminRoute path='/finances' exact component={AllFinance} />
+				<AdminRoute path='/due' exact component={Due} />
+				<AdminRoute path='/statement/:financeId' exact component={Statement} />
+				<AdminRoute path='/receipt/:financeId' exact component={Receipt} />
+				<AdminRoute path='/receipts' exact component={AllEntry} />
 				<PrivateRoute path='/product/update/:productId' exact component={UpdateProduct} />
 				<PrivateRoute path='/complaint/update/:complaintId' exact component={UpdateComplaint} />
 			</Switch>

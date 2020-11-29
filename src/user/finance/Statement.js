@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { isAuthenticated } from '../../auth/helper';
 import Base from '../../core/Base';
-import { createEntry, getEntries, getFinance } from '../helper/financeHelper';
+import { getEntries, getFinance } from '../helper/financeHelper';
+import Entry from './Entry';
 
 function Statement({ match }) {
 	const [ values, setValues ] = useState({
@@ -24,6 +25,7 @@ function Statement({ match }) {
 		loading: false
 	});
 	const [ entries, setEntries ] = useState([]);
+	const [ reload, setReload ] = useState(true);
 
 	const {
 		DOP,
@@ -73,16 +75,19 @@ function Statement({ match }) {
 		});
 	};
 
-	useEffect(() => {
-		preload();
-		getEntries(token, match.params.financeId).then((data) => {
-			if (data.error) {
-				console.log(data.error);
-			} else {
-				setEntries(data);
-			}
-		});
-	}, []);
+	useEffect(
+		() => {
+			preload();
+			getEntries(token, match.params.financeId).then((data) => {
+				if (data.error) {
+					console.log(data.error);
+				} else {
+					setEntries(data);
+				}
+			});
+		},
+		[ reload ]
+	);
 
 	const dateFormat = (data) => {
 		if (!data) return '---------';
@@ -173,11 +178,13 @@ function Statement({ match }) {
 				<div className='form-group col-sm-12'>
 					<span>EMI Amount : &nbsp; </span>
 					<span>
-						{(parseInt(price) -
-							parseInt(downPayment) +
-							parseInt(processingFee) +
-							parseInt(interest) * parseInt(months)) /
-							parseInt(months)}
+						{Math.floor(
+							(parseInt(price) -
+								parseInt(downPayment) +
+								parseInt(processingFee) +
+								parseInt(interest) * parseInt(months)) /
+								parseInt(months)
+						)}
 					</span>
 				</div>
 			</div>
@@ -193,14 +200,7 @@ function Statement({ match }) {
 				</thead>
 				<tbody>
 					{entries.map((entry, i) => {
-						return (
-							<tr key={entry._id}>
-								<td>{dateFormat(entry.date)}</td>
-								<td>{entry.voucherNo}</td>
-								<td>{entry.particular}</td>
-								<td>{entry.amount}</td>
-							</tr>
-						);
+						return <Entry key={entry._id} entry={entry} setReload={setReload} reload={reload} />;
 					})}
 				</tbody>
 			</table>
